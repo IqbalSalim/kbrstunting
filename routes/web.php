@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Livewire\Import\IndexImport;
+use App\Http\Livewire\Rekapan\IndexRekapan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
     Route::get('/import', IndexImport::class)->name('import');
+    Route::get('/rekapan', IndexRekapan::class)->name('rekapan');
 });
 
 require __DIR__ . '/auth.php';
