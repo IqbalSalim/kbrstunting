@@ -34,6 +34,8 @@ class IndexRekapan extends Component
 
     public function runningChart()
     {
+        $this->chekCheklist();
+
         $item['categories'] = Keluarga::select('desa_kelurahan')->where('kecamatan', 'batudaa')
             ->baduta($this->baduta)
             ->balita($this->balita)
@@ -56,7 +58,7 @@ class IndexRekapan extends Component
             ->groupByRaw('desa_kelurahan')->pluck('desa_kelurahan')->toArray();
 
 
-        $item['data'] = Keluarga::select(DB::raw('COUNT(desa_kelurahan) as jumlah'))->where('kecamatan', 'asparaga')
+        $item['data'] = Keluarga::select(DB::raw('COUNT(desa_kelurahan) as jumlah'))->where('kecamatan', 'batudaa')
             ->baduta($this->baduta)
             ->balita($this->balita)
             ->pusHamil($this->pusHamil)
@@ -76,6 +78,39 @@ class IndexRekapan extends Component
             ->terlaluBanyak($this->terlaluBanyak)
             ->kbrStunting($this->kbrStunting)
             ->groupByRaw('desa_kelurahan')->pluck('jumlah')->toArray();
+
+
+
         $this->dispatchBrowserEvent('chartChanged', ['item' => $item]);
+    }
+
+    public function chekCheklist()
+    {
+        if ($this->praSejahtera) {
+            $this->anakTidakSekolah = false;
+            $this->tidakMemilikiSumberPenghasilan = false;
+            $this->lantaiTanah = false;
+            $this->tidakMakan = false;
+        }
+
+        if ($this->kbrStunting) {
+            $this->baduta = false;
+            $this->balita = false;
+            $this->pus = false;
+            $this->pusHamil = false;
+            $this->anakTidakSekolah = false;
+            $this->tidakMemilikiSumberPenghasilan = false;
+            $this->lantaiTanah = false;
+            $this->tidakMakan = false;
+            $this->praSejahtera = false;
+            $this->tidakMemilikiSumberAir = false;
+            $this->tidakMemilikiJamban = false;
+            $this->tidakMemilikiRumah = false;
+            $this->pendidikanDibawah = false;
+            $this->terlaluMuda = false;
+            $this->terlaluTua = false;
+            $this->terlaluDekat = false;
+            $this->terlaluBanyak = false;
+        }
     }
 }

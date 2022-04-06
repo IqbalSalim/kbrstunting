@@ -44,7 +44,6 @@ class Keluarga extends Model
     public function scopeBaduta($query, $baduta)
     {
 
-
         if ($baduta) {
             return $query->where('baduta', 1);
         } else {
@@ -111,7 +110,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('tidak_makan', 1);
         } else {
-            return $query->orWhere('tidak_makan', 1);
+            return $query;
         }
     }
 
@@ -120,7 +119,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('pra_sejahtera', 1);
         } else {
-            return $query->orWhere('pra_sejahtera', 1);
+            return $query;
         }
     }
 
@@ -129,7 +128,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('tidak_memiliki_sumber_air', 1);
         } else {
-            return $query->orWhere('tidak_memiliki_sumber_air', 1);
+            return $query;
         }
     }
 
@@ -138,7 +137,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('tidak_memiliki_jamban', 1);
         } else {
-            return $query->orWhere('tidak_memiliki_jamban', 1);
+            return $query;
         }
     }
 
@@ -147,7 +146,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('tidak_memiliki_rumah', 1);
         } else {
-            return $query->orWhere('tidak_memiliki_rumah', 1);
+            return $query;
         }
     }
 
@@ -156,7 +155,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('pendidikan_ibu_dibawah_sltp', 1);
         } else {
-            return $query->orWhere('pendidikan_ibu_dibawah_sltp', 1);
+            return $query;
         }
     }
 
@@ -165,7 +164,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('terlalu_muda', 1);
         } else {
-            return $query->orWhere('terlalu_muda', 1);
+            return $query;
         }
     }
 
@@ -174,7 +173,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('terlalu_tua', 1);
         } else {
-            return $query->orWhere('terlalu_tua', 1);
+            return $query;
         }
     }
 
@@ -183,7 +182,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('terlalu_dekat', 1);
         } else {
-            return $query->orWhere('terlalu_dekat', 1);
+            return $query;
         }
     }
 
@@ -192,7 +191,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('terlalu_banyak', 1);
         } else {
-            return $query->orWhere('terlalu_banyak', 1);
+            return $query;
         }
     }
 
@@ -201,7 +200,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('kbr_stunting', 1);
         } else {
-            return $query->orWhere('kbr_stunting', 1);
+            return $query;
         }
     }
 }

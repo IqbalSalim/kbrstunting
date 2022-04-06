@@ -26,93 +26,84 @@
                             <label for="pusHamil" class="text-sm font-semibold">PUS Hamil</label>
                         </div>
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="pus" value="reguler" wire:model='pus' name="pus" type="checkbox">
+                            <input id="pus" wire:model='pus' name="pus" type="checkbox">
                             <label for="pus" class="text-sm font-semibold">PUS</label>
                         </div>
                     </div>
                     <div class="flex flex-col space-y-2">
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="anakTidakSekolah" value="reguler" wire:model='anakTidakSekolah'
-                                name="anakTidakSekolah" type="checkbox">
+                            <input id="anakTidakSekolah" wire:model='anakTidakSekolah' name="anakTidakSekolah"
+                                type="checkbox">
                             <label for="anakTidakSekolah" class="text-sm font-semibold">Anak Tidak Sekolah</label>
                         </div>
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="tidakMemilikiSumberPenghasilan" value="reguler"
-                                wire:model='tidakMemilikiSumberPenghasilan' name="tidakMemilikiSumberPenghasilan"
-                                type="checkbox">
+                            <input id="tidakMemilikiSumberPenghasilan" wire:model='tidakMemilikiSumberPenghasilan'
+                                name="tidakMemilikiSumberPenghasilan" type="checkbox">
                             <label for="tidakMemilikiSumberPenghasilan" class="text-sm font-semibold">Tidak Memiliki
                                 Sumber
                                 Penghasilan</label>
                         </div>
 
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="lantaiTanah" value="reguler" wire:model='lantaiTanah' name="lantaiTanah"
-                                type="checkbox">
+                            <input id="lantaiTanah" wire:model='lantaiTanah' name="lantaiTanah" type="checkbox">
                             <label for="lantaiTanah" class="text-sm font-semibold">Lantai Tanah</label>
                         </div>
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="tidakMakan" value="reguler" wire:model='tidakMakan' name="tidakMakan"
-                                type="checkbox">
+                            <input id="tidakMakan" wire:model='tidakMakan' name="tidakMakan" type="checkbox">
                             <label for="tidakMakan" class="text-sm font-semibold">Tidak Makan</label>
                         </div>
                     </div>
                     <div class="flex flex-col space-y-2">
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="praSejahtera" value="reguler" wire:model='praSejahtera' name="praSejahtera"
-                                type="checkbox">
+                            <input id="praSejahtera" wire:model='praSejahtera' name="praSejahtera" type="checkbox">
                             <label for="praSejahtera" class="text-sm font-semibold">Pra Sejahtera</label>
                         </div>
 
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="tidakMemilikiSumberAir" value="reguler" wire:model='tidakMemilikiSumberAir'
+                            <input id="tidakMemilikiSumberAir" wire:model='tidakMemilikiSumberAir'
                                 name="tidakMemilikiSumberAir" type="checkbox">
                             <label for="tidakMemilikiSumberAir" class="text-sm font-semibold">Tidak Memiliki Sumber
                                 Air</label>
                         </div>
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="tidakMemilikiJamban" value="reguler" wire:model='tidakMemilikiJamban'
-                                name="tidakMemilikiJamban" type="checkbox">
+                            <input id="tidakMemilikiJamban" wire:model='tidakMemilikiJamban' name="tidakMemilikiJamban"
+                                type="checkbox">
                             <label for="tidakMemilikiJamban" class="text-sm font-semibold">Tidak Memiliki Jamban</label>
                         </div>
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="tidakMemilikiRumah" value="reguler" wire:model='tidakMemilikiRumah'
-                                name="tidakMemilikiRumah" type="checkbox">
+                            <input id="tidakMemilikiRumah" wire:model='tidakMemilikiRumah' name="tidakMemilikiRumah"
+                                type="checkbox">
                             <label for="tidakMemilikiRumah" class="text-sm font-semibold">Tidak Memiliki Rumah Layak
                                 Huni</label>
                         </div>
                     </div>
                     <div class="flex flex-col space-y-2">
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="pendidikanDibawah" value="reguler" wire:model='pendidikanDibawah'
-                                name="pendidikanDibawah" type="checkbox">
+                            <input id="pendidikanDibawah" wire:model='pendidikanDibawah' name="pendidikanDibawah"
+                                type="checkbox">
                             <label for="pendidikanDibawah" class="text-sm font-semibold">Pendidikan Ibu di Bawah
                                 SLTP</label>
                         </div>
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="terlaluMuda" value="reguler" wire:model='terlaluMuda' name="terlaluMuda"
-                                type="checkbox">
+                            <input id="terlaluMuda" wire:model='terlaluMuda' name="terlaluMuda" type="checkbox">
                             <label for="terlaluMuda" class="text-sm font-semibold">Terlalu Muda</label>
                         </div>
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="terlaluTua" value="reguler" wire:model='terlaluTua' name="terlaluTua"
-                                type="checkbox">
+                            <input id="terlaluTua" wire:model='terlaluTua' name="terlaluTua" type="checkbox">
                             <label for="terlaluTua" class="text-sm font-semibold">Terlalu Tua</label>
                         </div>
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="terlaluDekat" value="reguler" wire:model='terlaluDekat' name="terlaluDekat"
-                                type="checkbox">
+                            <input id="terlaluDekat" wire:model='terlaluDekat' name="terlaluDekat" type="checkbox">
                             <label for="terlaluDekat" class="text-sm font-semibold">Terlalu Dekat</label>
                         </div>
                     </div>
                     <div class="flex flex-col space-y-2">
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="terlaluBanyak" value="reguler" wire:model='terlaluBanyak' name="terlaluBanyak"
-                                type="checkbox">
+                            <input id="terlaluBanyak" wire:model='terlaluBanyak' name="terlaluBanyak" type="checkbox">
                             <label for="terlaluBanyak" class="text-sm font-semibold">Terlalu Banyak</label>
                         </div>
                         <div class="flex flex-row items-center space-x-2">
-                            <input id="kbrStunting" value="reguler" wire:model='kbrStunting' name="kbrStunting"
-                                type="checkbox">
+                            <input id="kbrStunting" wire:model='kbrStunting' name="kbrStunting" type="checkbox">
                             <label for="kbrStunting" class="text-sm font-semibold">KBR Stunting</label>
                         </div>
                     </div>
