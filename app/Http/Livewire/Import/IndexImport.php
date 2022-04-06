@@ -2,7 +2,11 @@
 
 namespace App\Http\Livewire\Import;
 
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
 use App\Models\Keluarga;
+use App\Models\Kelurahan;
+use App\Models\Provinsi;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -40,8 +44,6 @@ class IndexImport extends Component
             ]
         );
 
-
-
         $nameFile = $this->file->store('files', 'public');
 
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
@@ -52,10 +54,6 @@ class IndexImport extends Component
 
         $rt = $data[3][4];
         $dusunRw = $data[5][4];
-        $desaKelurahan = $data[7][4];
-        $kecamatan = $data[8][4];
-        $kabupaten = $data[9][4];
-        $provinsi = $data[10][4];
         $data1 = [];
 
 
@@ -66,8 +64,35 @@ class IndexImport extends Component
         }
 
         foreach ($data1 as $row) {
+            $provinsi_id = Provinsi::where('kd_provinsi', substr($row[1], 0, 2))->first()->id;
+            $provinsiNama = Provinsi::find($provinsi_id)->nama;
+            $kabupatens = Kabupaten::where('provinsi_id', $provinsi_id)->get();
+            foreach ($kabupatens as $value) {
+                if ($value->kd_kabupaten == substr($row[1], 2, 2)) {
+                    $kecamatans = Kecamatan::where('kabupaten_id', $value->id)->get();
+                    $kabupatenNama = $value->nama;
+                }
+            }
+
+            foreach ($kecamatans as $value) {
+                if ($value->kd_kecamatan == substr($row[1], 4, 2)) {
+                    $kelurahans = Kelurahan::where('kecamatan_id', $value->id)->get();
+                    $kecamatanNama = $value->nama;
+                }
+            }
+
+
+            foreach ($kelurahans as $value) {
+                if ($value->kd_kelurahan == substr($row[1], 6, 4)) {
+                    $kelurahan_id = $value->id;
+                    $kelurahanNama = $value->nama;
+                }
+            }
+
+
             Keluarga::create([
-                'nomor' => $row[0],
+                'kelurahan_id' => $kelurahan_id,
+                'kd_kelurahan' => $row[0],
                 'kode_keluarga' => $row[1],
                 'nik_kk' => $row[5],
                 'nama_kk' => $row[6],
@@ -91,10 +116,10 @@ class IndexImport extends Component
                 'kbr_stunting' => $row[25] == 'V' ? 1 : 0,
                 'rt' => $rt,
                 'dusun_rw' => $dusunRw,
-                'desa_kelurahan' => $desaKelurahan,
-                'kecamatan' => $kecamatan,
-                'kabupaten_kota' => $kabupaten,
-                'provinsi' => $provinsi,
+                'desa_kelurahan' => $kelurahanNama,
+                'kecamatan' => $kecamatanNama,
+                'kabupaten_kota' => $kabupatenNama,
+                'provinsi' => $provinsiNama,
             ]);
         }
 

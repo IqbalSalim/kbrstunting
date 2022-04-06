@@ -15,7 +15,8 @@ class CreateKeluargasTable extends Migration
     {
         Schema::create('keluargas', function (Blueprint $table) {
             $table->id();
-            $table->string('nomor');
+            $table->foreignId('kelurahan_id')->constrained('kelurahans')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('kd_kelurahan');
             $table->string('kode_keluarga');
             $table->string('nik_kk');
             $table->string('nama_kk');

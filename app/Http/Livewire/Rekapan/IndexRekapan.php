@@ -34,7 +34,7 @@ class IndexRekapan extends Component
 
     public function runningChart()
     {
-        $item['categories'] = Keluarga::select('desa_kelurahan')->where('kecamatan', 'asparaga')
+        $item['categories'] = Keluarga::select('desa_kelurahan')->where('kecamatan', 'batudaa')
             ->baduta($this->baduta)
             ->balita($this->balita)
             ->pusHamil($this->pusHamil)

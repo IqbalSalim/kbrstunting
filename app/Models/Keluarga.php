@@ -10,7 +10,8 @@ class Keluarga extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nomor',
+        'kelurahan_id',
+        'kd_kelurahan',
         'kode_keluarga',
         'nik_kk',
         'nama_kk',
@@ -42,10 +43,12 @@ class Keluarga extends Model
 
     public function scopeBaduta($query, $baduta)
     {
+
+
         if ($baduta) {
             return $query->where('baduta', 1);
         } else {
-            return $query->orWhere('baduta', 1);
+            return $query;
         }
     }
 
@@ -54,7 +57,7 @@ class Keluarga extends Model
         if ($balita) {
             return $query->where('balita', 1);
         } else {
-            return $query->orWhere('balita', 1);
+            return $query;
         }
     }
 
@@ -63,7 +66,7 @@ class Keluarga extends Model
         if ($pusHamil) {
             return $query->where('pus_hamil', 1);
         } else {
-            return $query->orWhere('pus_hamil', 1);
+            return $query;
         }
     }
 
@@ -72,7 +75,7 @@ class Keluarga extends Model
         if ($pus) {
             return $query->where('pus', 1);
         } else {
-            return $query->orWhere('pus', 1);
+            return $query;
         }
     }
 
@@ -81,7 +84,7 @@ class Keluarga extends Model
         if ($anakTidakSekolah) {
             return $query->where('anak_tidak_sekolah', 1);
         } else {
-            return $query->orWhere('anak_tidak_sekolah', 1);
+            return $query;
         }
     }
 
@@ -90,7 +93,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('tidak_memiliki_sumber_penghasilan', 1);
         } else {
-            return $query->orWhere('tidak_memiliki_sumber_penghasilan', 1);
+            return $query;
         }
     }
 
@@ -99,7 +102,7 @@ class Keluarga extends Model
         if ($cek) {
             return $query->where('lantai_tanah', 1);
         } else {
-            return $query->orWhere('lantai_tanah', 1);
+            return $query;
         }
     }
 
