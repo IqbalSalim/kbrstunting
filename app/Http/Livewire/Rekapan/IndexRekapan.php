@@ -2,7 +2,10 @@
 
 namespace App\Http\Livewire\Rekapan;
 
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
 use App\Models\Keluarga;
+use App\Models\Provinsi;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\ColumnChartModel;
 use Illuminate\Support\Facades\DB;
@@ -12,14 +15,28 @@ class IndexRekapan extends Component
 {
     public $baduta, $balita, $pusHamil, $pus, $anakTidakSekolah, $tidakMemilikiSumberPenghasilan, $lantaiTanah, $tidakMakan, $praSejahtera, $tidakMemilikiSumberAir, $tidakMemilikiJamban, $tidakMemilikiRumah, $pendidikanDibawah, $terlaluMuda, $terlaluTua, $terlaluDekat, $terlaluBanyak, $kbrStunting;
     public $item;
+    public $paginate = 5, $search;
+    protected $queryString = ['search'];
+    public $provinces, $province, $districts, $district, $subDistricts, $subDistrict;
 
     public function mount()
     {
+        $this->provinces = Provinsi::all();
     }
 
     public function render()
     {
         return view('livewire.rekapan.index-rekapan');
+    }
+
+    public function getDistrict()
+    {
+        $this->districts = Kabupaten::where('provinsi_id', $this->province)->get();
+    }
+
+    public function getSubDistrict()
+    {
+        $this->subDistricts = Kecamatan::where('kabupaten_id', $this->district)->get();
     }
 
     public function hidrate()
@@ -36,7 +53,7 @@ class IndexRekapan extends Component
     {
         $this->chekCheklist();
 
-        $item['categories'] = Keluarga::select('desa_kelurahan')->where('kecamatan', 'batudaa')
+        $item['categories'] = Keluarga::select('desa_kelurahan')->whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)
             ->baduta($this->baduta)
             ->balita($this->balita)
             ->pusHamil($this->pusHamil)
@@ -58,7 +75,7 @@ class IndexRekapan extends Component
             ->groupByRaw('desa_kelurahan')->pluck('desa_kelurahan')->toArray();
 
 
-        $item['data'] = Keluarga::select(DB::raw('COUNT(desa_kelurahan) as jumlah'))->where('kecamatan', 'batudaa')
+        $item['data'] = Keluarga::select(DB::raw('COUNT(desa_kelurahan) as jumlah'))->whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)
             ->baduta($this->baduta)
             ->balita($this->balita)
             ->pusHamil($this->pusHamil)
