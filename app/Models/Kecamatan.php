@@ -14,4 +14,14 @@ class Kecamatan extends Model
         'kabupaten_id',
         'nama',
     ];
+
+    public function kelurahans()
+    {
+        return $this->hasMany(Kelurahan::class);
+    }
+
+    public function kabupaten()
+    {
+        return $this->belongsTo(Kabupaten::class);
+    }
 }

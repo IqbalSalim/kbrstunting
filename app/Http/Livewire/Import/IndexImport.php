@@ -10,26 +10,46 @@ use App\Models\Provinsi;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-
+use Livewire\WithPagination;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class IndexImport extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     public $file;
     public $name, $desaKelurahan, $kecamatan, $kabupatenKota, $provinsi;
+    public $paginate = 5, $search;
+    protected $queryString = ['search'];
+    public $provinces, $province, $districts, $district, $subDistricts, $subDistrict;
 
     protected $listeners = [
         'delete'
     ];
 
+    public function mount()
+    {
+        $this->provinces = Provinsi::all();
+    }
+
     public function render()
     {
         return view('livewire.import.index-import', [
-            'keluarga' => Keluarga::select('desa_kelurahan', 'kecamatan', 'kabupaten_kota', 'provinsi')->distinct('desa_kelurahan')->get(),
+            'keluarga' => ($this->search === null) ?
+                Keluarga::select('desa_kelurahan', 'kecamatan', 'kabupaten_kota', 'provinsi')->distinct('desa_kelurahan')->whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)->paginate($this->paginate) :
+                Keluarga::select('desa_kelurahan', 'kecamatan', 'kabupaten_kota', 'provinsi')->distinct('desa_kelurahan')->whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)->searchKelurahan($this->search)->paginate($this->paginate),
         ]);
+    }
+
+    public function getDistrict()
+    {
+        $this->districts = Kabupaten::where('provinsi_id', $this->province)->get();
+    }
+
+    public function getSubDistrict()
+    {
+        $this->subDistricts = Kecamatan::where('kabupaten_id', $this->district)->get();
     }
 
     public function store()

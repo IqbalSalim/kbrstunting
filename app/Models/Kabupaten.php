@@ -15,4 +15,14 @@ class Kabupaten extends Model
         'kd_kabupaten',
         'nama',
     ];
+
+    public function kecamatans()
+    {
+        return $this->hasMany(Kecamatan::class);
+    }
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class);
+    }
 }

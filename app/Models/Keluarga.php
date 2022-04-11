@@ -41,6 +41,12 @@ class Keluarga extends Model
         'provinsi',
     ];
 
+    public function kelurahan()
+    {
+        return $this->belongsTo(Kelurahan::class);
+    }
+
+
     public function scopeBaduta($query, $baduta)
     {
 
@@ -202,5 +208,51 @@ class Keluarga extends Model
         } else {
             return $query;
         }
+    }
+
+    public function scopeWhereProvince($query, $id)
+    {
+        if ($id == null || $id == '') {
+            return $query;
+        }
+
+        return $query->whereHas('kelurahan', function ($query) use ($id) {
+            $query->whereHas('kecamatan', function ($query) use ($id) {
+                $query->whereHas('kabupaten', function ($query) use ($id) {
+                    $query->where('provinsi_id', $id);
+                });
+            });
+        });
+    }
+
+    public function scopeWhereDistrict($query, $id)
+    {
+        if ($id == null || $id == '') {
+            return $query;
+        }
+
+        return $query->whereHas('kelurahan', function ($query) use ($id) {
+            $query->whereHas('kecamatan', function ($query) use ($id) {
+                $query->where('kabupaten_id', $id);
+            });
+        });
+    }
+
+    public function scopeWhereSubDistrict($query, $id)
+    {
+        if ($id == null || $id == '') {
+            return $query;
+        }
+
+        return $query->whereHas('kelurahan', function ($query) use ($id) {
+            $query->where('kecamatan_id', $id);
+        });
+    }
+
+    public function scopeSearchKelurahan($query, $nama)
+    {
+        return $query->whereHas('kelurahan', function ($query) use ($nama) {
+            $query->where('nama', 'like', '%' . $nama . '%');
+        });
     }
 }

@@ -14,4 +14,9 @@ class Provinsi extends Model
         'kd_provinsi',
         'nama'
     ];
+
+    public function kabupatens()
+    {
+        return $this->hasMany(Kabupaten::class);
+    }
 }

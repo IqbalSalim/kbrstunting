@@ -7,11 +7,12 @@
 
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white shadow-md sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+            <div class="py-3 overflow-hidden bg-white shadow-md sm:rounded-lg">
+                <div class="px-4 py-2 font-medium bg-white border-b border-gray-200 ">
                     Import
                 </div>
-                <form wire:submit.prevent='store' novalidate class="px-4 py-2">
+
+                <form wire:submit.prevent='store' novalidate class="px-4 py-4">
                     <div>
                         <x-label for="file" :value="__('File KBR-Stunting')" />
 
@@ -31,6 +32,66 @@
 
                 <hr>
                 <div class="px-4">
+                    <div class="py-2 mt-2">
+                        <div class="flex flex-row items-end justify-between space-x-6">
+                            <div class="flex flex-row space-x-4">
+                                <div>
+                                    <x-label for="paginate" :value="__('Item')" />
+                                    <select name="paginate" id="paginate" wire:model="paginate"
+                                        class="block w-full mt-1 text-sm capitalize border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <x-label for="province" :value="__('Provinsi')" />
+                                    <select name="province" id="province" wire:model="province"
+                                        wire:change='getDistrict'
+                                        class="block w-full mt-1 text-sm capitalize border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <option value="">-- Semua Provinsi --</option>
+                                        @foreach ($provinces as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div>
+                                    <x-label for="district" :value="__('Kabupaten')" />
+                                    <select name="district" id="district" wire:model="district"
+                                        wire:change='getSubDistrict'
+                                        class="block w-full mt-1 text-sm capitalize border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <option value="">-- Semua Kabupaten --</option>
+                                        @if (!empty($districts))
+                                            @foreach ($districts as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                                <div>
+                                    <x-label for="subDistrict" :value="__('Kecamatan')" />
+                                    <select name="subDistrict" id="subDistrict" wire:model="subDistrict"
+                                        class="block w-full mt-1 text-sm capitalize border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <option value="">-- Semua Kecamatan --</option>
+                                        @if (!empty($subDistricts))
+                                            @foreach ($subDistricts as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="md:w-2/12">
+                                <x-label for="search" :value="__('Nama Kelurahan/Desa')" />
+                                <x-input wire:model="search" id="search" class="block w-full mt-1 text-sm"
+                                    placeholder="Cari..." type="text" name="search" autofocus />
+                            </div>
+
+                        </div>
+                    </div>
                     <div class="w-full overflow-x-auto md:overflow-hidden">
                         <table class="min-w-full mt-2 divide-y divide-gray-200 table-auto">
                             <thead class="bg-gray-50">
@@ -96,13 +157,10 @@
                                 {{-- {{ $row->desa_kelurahan }}, {{ $row->kecamatan }}, {{ $row->kabupaten_kota }}, {{ $row->provinsi }}) --}}
                             </tbody>
                         </table>
-                        {{-- {{ $rkps->links() }} --}}
+                        {{ $keluarga->links() }}
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
 </div>
