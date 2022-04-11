@@ -10,23 +10,48 @@ use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\ColumnChartModel;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class IndexRekapan extends Component
 {
+    use WithPagination;
+
     public $baduta, $balita, $pusHamil, $pus, $anakTidakSekolah, $tidakMemilikiSumberPenghasilan, $lantaiTanah, $tidakMakan, $praSejahtera, $tidakMemilikiSumberAir, $tidakMemilikiJamban, $tidakMemilikiRumah, $pendidikanDibawah, $terlaluMuda, $terlaluTua, $terlaluDekat, $terlaluBanyak, $kbrStunting;
-    public $item;
-    public $paginate = 5, $search;
+    public $item, $export = [];
+    public $paginate = 10, $search;
     protected $queryString = ['search'];
     public $provinces, $province, $districts, $district, $subDistricts, $subDistrict;
 
     public function mount()
     {
         $this->provinces = Provinsi::all();
+        $this->setExport();
     }
 
     public function render()
     {
-        return view('livewire.rekapan.index-rekapan');
+        return view('livewire.rekapan.index-rekapan', [
+            'keluarga' => Keluarga::whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)
+                ->baduta($this->baduta)
+                ->balita($this->balita)
+                ->pusHamil($this->pusHamil)
+                ->pus($this->pus)
+                ->anakTidakSekolah($this->anakTidakSekolah)
+                ->tidakMemilikiSumberPenghasilan($this->tidakMemilikiSumberPenghasilan)
+                ->lantaiTanah($this->lantaiTanah)
+                ->tidakMakan($this->tidakMakan)
+                ->praSejahtera($this->praSejahtera)
+                ->tidakMemilikiSumberAir($this->tidakMemilikiSumberAir)
+                ->tidakMemilikiJamban($this->tidakMemilikiJamban)
+                ->tidakMemilikiRumah($this->tidakMemilikiRumah)
+                ->pendidikanDibawah($this->pendidikanDibawah)
+                ->terlaluMuda($this->terlaluMuda)
+                ->terlaluTua($this->terlaluTua)
+                ->terlaluDekat($this->terlaluDekat)
+                ->terlaluBanyak($this->terlaluBanyak)
+                ->kbrStunting($this->kbrStunting)
+                ->paginate($this->paginate),
+        ]);
     }
 
     public function getDistrict()
@@ -41,12 +66,13 @@ class IndexRekapan extends Component
 
     public function hidrate()
     {
-        return $this->dispatchBrowserEvent('chartChanged', ['item' => $this->item]);
+        $this->dispatchBrowserEvent('chartChanged', ['item' => $this->item]);
     }
 
     public function updated()
     {
         $this->runningChart();
+        $this->setExport();
     }
 
     public function runningChart()
@@ -129,5 +155,34 @@ class IndexRekapan extends Component
             $this->terlaluDekat = false;
             $this->terlaluBanyak = false;
         }
+    }
+
+    public function setExport()
+    {
+        $export = [
+            'baduta' => $this->baduta,
+            'balita' => $this->balita,
+            'pusHamil' => $this->pusHamil,
+            'pus' => $this->pus,
+            'anakTidakSekolah' => $this->anakTidakSekolah,
+            'tidakMemilikiSumberPenghasilan' => $this->tidakMemilikiSumberPenghasilan,
+            'lantaiTanah' => $this->lantaiTanah,
+            'tidakMakan' => $this->tidakMakan,
+            'praSejahtera' => $this->praSejahtera,
+            'tidakMemilikiSumberAir' => $this->tidakMemilikiSumberAir,
+            'tidakMemilikiJamban' => $this->tidakMemilikiJamban,
+            'tidakMemilikiRumah' => $this->tidakMemilikiRumah,
+            'pendidikanDibawah' => $this->pendidikanDibawah,
+            'terlaluMuda' => $this->terlaluMuda,
+            'terlaluTua' => $this->terlaluTua,
+            'terlaluDekat' => $this->terlaluDekat,
+            'terlaluBanyak' => $this->terlaluBanyak,
+            'kbrStunting' => $this->kbrStunting,
+            'province' => $this->province,
+            'district' => $this->district,
+            'subDistrict' => $this->subDistrict,
+        ];
+
+        $this->export = json_encode($export);
     }
 }

@@ -4,8 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "260eca024823640f741afef57d2fb512",
+    "content-hash": "1580416b4b56bff628eaba10a8eb72ef",
     "packages": [
+        {
+            "name": "alhimik1986/php-excel-templator",
+            "version": "v1.0.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alhimik1986/php-excel-templator.git",
+                "reference": "fd9a132a8a202284479bae279b419a7c22cf4754"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alhimik1986/php-excel-templator/zipball/fd9a132a8a202284479bae279b419a7c22cf4754",
+                "reference": "fd9a132a8a202284479bae279b419a7c22cf4754",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "phpoffice/phpspreadsheet": ">=1.22"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "alhimik1986\\PhpExcelTemplator\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sidorovich Nikolay",
+                    "email": "sidorovich21101986@mail.ru"
+                }
+            ],
+            "description": "PHP Spreadsheet extension for generating excel files from template",
+            "keywords": [
+                "excel",
+                "php",
+                "template",
+                "templater",
+                "templator"
+            ],
+            "support": {
+                "issues": "https://github.com/alhimik1986/php-excel-templator/issues",
+                "source": "https://github.com/alhimik1986/php-excel-templator/tree/v1.0.14"
+            },
+            "time": "2022-04-03T15:14:44+00:00"
+        },
         {
             "name": "asantibanez/livewire-charts",
             "version": "v2.4.1",
