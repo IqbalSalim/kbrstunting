@@ -193,6 +193,10 @@
                                     </th>
                                     <th scope="col"
                                         class="px-2 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase md:px-6">
+                                        NIK KK
+                                    </th>
+                                    <th scope="col"
+                                        class="px-2 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase md:px-6">
                                         Nama KK
                                     </th>
                                     <th scope="col"
@@ -219,25 +223,28 @@
                                 @endphp
                                 @foreach ($keluarga as $row)
                                     <tr>
-                                        <td class="px-4 py-3 text-sm text-gray-500 md:px-6 whitespace-nowrap">
+                                        <td class="w-1/12 px-4 py-3 text-xs text-gray-500 md:px-6 whitespace-nowrap">
                                             {{ $no++ }}
                                         </td>
-                                        <td class="px-2 py-4 text-sm md:px-6">
+                                        <td class="px-2 py-4 text-xs md:px-6">
                                             {{ $row->kode_keluarga }}
                                         </td>
-                                        <td class="px-2 py-4 text-sm md:px-6">
+                                        <td class="px-2 py-4 text-xs md:px-6">
                                             {{ $row->nik_kk }}
                                         </td>
-                                        <td class="px-2 py-4 text-sm md:px-6">
+                                        <td class="px-2 py-4 text-xs md:px-6">
+                                            {{ $row->nama_kk }}
+                                        </td>
+                                        <td class="px-2 py-4 text-xs md:px-6">
                                             {{ $row->desa_kelurahan }}
                                         </td>
-                                        <td class="px-2 py-4 text-sm md:px-6">
+                                        <td class="px-2 py-4 text-xs md:px-6">
                                             {{ $row->kecamatan }}
                                         </td>
-                                        <td class="px-2 py-4 text-sm md:px-6">
+                                        <td class="px-2 py-4 text-xs md:px-6">
                                             {{ $row->kabupaten_kota }}
                                         </td>
-                                        <td class="px-2 py-4 text-sm md:px-6">
+                                        <td class="px-2 py-4 text-xs md:px-6">
                                             {{ $row->provinsi }}
                                         </td>
                                     </tr>
