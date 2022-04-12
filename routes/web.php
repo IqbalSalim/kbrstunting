@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ExportKeluargaController;
 use App\Http\Livewire\Import\IndexImport;
 use App\Http\Livewire\Rekapan\IndexRekapan;
@@ -16,13 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
+Route::get('/', [AuthenticatedSessionController::class, 'create']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
