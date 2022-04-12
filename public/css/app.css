@@ -833,6 +833,9 @@ select {
 .w-auto {
   width: auto;
 }
+.w-40 {
+  width: 10rem;
+}
 .w-full {
   width: 100%;
 }
@@ -850,6 +853,9 @@ select {
 }
 .w-6 {
   width: 1.5rem;
+}
+.w-32 {
+  width: 8rem;
 }
 .min-w-full {
   min-width: 100%;
