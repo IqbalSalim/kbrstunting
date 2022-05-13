@@ -20,7 +20,7 @@ class IndexImport extends Component
 
     public $file;
     public $name, $desaKelurahan, $kecamatan, $kabupatenKota, $provinsi;
-    public $paginate = 5, $search;
+    public $paginate = 20, $search;
     protected $queryString = ['search'];
     public $provinces, $province, $districts, $district, $subDistricts, $subDistrict;
 
@@ -63,6 +63,12 @@ class IndexImport extends Component
                 'file' => 'File Import'
             ]
         );
+
+
+        // ini_set('memory_limit', '18024M');
+        // set_time_limit(0); //You can use 0 to remove limits
+        // set_time_limit(3000000);
+        ini_set('max_execution_time', '-1');
 
         $nameFile = $this->file->store('files', 'public');
 
