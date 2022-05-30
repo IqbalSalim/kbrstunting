@@ -25,7 +25,7 @@ class ExportKeluargaController extends Controller
     public function index(Request $request)
     {
         $result = [];
-        $kdKelurahan = [];
+        $kdKecamatan = [];
         $kodeKeluarga = [];
         $nikKK = [];
         $namaKK = [];
@@ -36,6 +36,10 @@ class ExportKeluargaController extends Controller
 
         $item = json_decode($request->export);
         $select = $this->addSelect($item);
+
+
+
+
 
         $query = Keluarga::whereProvince($item->province)->whereDistrict($item->district)->whereSubDistrict($item->subDistrict)
             ->baduta($item->baduta)
@@ -56,25 +60,50 @@ class ExportKeluargaController extends Controller
             ->terlaluDekat($item->terlaluDekat)
             ->terlaluBanyak($item->terlaluBanyak)
             ->kbrStunting($item->kbrStunting)
+            ->orderBy('provinsi')
+            ->orderBy('kabupaten_kota')
+            ->orderBy('kecamatan')
+            ->orderBy('desa_kelurahan')
+            ->orderBy('nama_kk')
             ->get();
 
+
+        // dd($query);
 
         foreach ($query as $sel) {
             array_push($result, []);
         }
-        for ($i = 0; $i < count($query); $i++) {
-            for ($j = 0; $j < count($this->requestSelect); $j++) {
-                array_push($result[$i], $query[$i][$this->requestSelect[$j]]);
+
+        $index = 0;
+        foreach ($query as $row) {
+            foreach ($this->requestSelect as $row2) {
+                array_push($result[$index], $row[$row2]);
             }
-            array_push($kdKelurahan, $query[$i]['kd_kelurahan']);
-            array_push($kodeKeluarga, $query[$i]['kode_keluarga']);
-            array_push($nikKK, $query[$i]['nik_kk']);
-            array_push($namaKK, $query[$i]['nama_kk']);
-            array_push($kelurahan, $query[$i]->kelurahan->nama);
-            array_push($kecamatan, $query[$i]->kelurahan->kecamatan->nama);
-            array_push($kabupaten, $query[$i]->kelurahan->kecamatan->kabupaten->nama);
-            array_push($provinsi, $query[$i]->kelurahan->kecamatan->kabupaten->provinsi->nama);
+            array_push($kdKecamatan, $row['kd_kecamatan']);
+            array_push($kodeKeluarga, $row['kode_keluarga']);
+            array_push($nikKK, $row['nik_kk']);
+            array_push($namaKK, $row['nama_kk']);
+            array_push($kelurahan, $row->kelurahan->nama);
+            array_push($kecamatan, $row->kelurahan->kecamatan->nama);
+            array_push($kabupaten, $row->kelurahan->kecamatan->kabupaten->nama);
+            array_push($provinsi, $row->kelurahan->kecamatan->kabupaten->provinsi->nama);
+            $index++;
         }
+
+        // for ($i = 0; $i < count($query); $i++) {
+        //     for ($j = 0; $j < count($this->requestSelect); $j++) {
+        //         array_push($result[$i], $query[$i][$this->requestSelect[$j]]);
+        //     }
+        //     array_push($kdKecamatan, $query[$i]['kd_kecamatan']);
+        //     array_push($kodeKeluarga, $query[$i]['kode_keluarga']);
+        //     array_push($nikKK, $query[$i]['nik_kk']);
+        //     array_push($namaKK, $query[$i]['nama_kk']);
+        //     array_push($kelurahan, $query[$i]->kelurahan->nama);
+        //     array_push($kecamatan, $query[$i]->kelurahan->kecamatan->nama);
+        //     array_push($kabupaten, $query[$i]->kelurahan->kecamatan->kabupaten->nama);
+        //     array_push($provinsi, $query[$i]->kelurahan->kecamatan->kabupaten->provinsi->nama);
+        // }
+
 
 
         $templateFile = 'templates/template_KBRS.xlsx';
@@ -84,7 +113,7 @@ class ExportKeluargaController extends Controller
         $header = $this->addHeader($item);
 
         $params = [
-            '[kd_kelurahan]' => new ExcelParam(CellSetterArrayValueSpecial::class, $kdKelurahan),
+            '[kd_kelurahan]' => new ExcelParam(CellSetterArrayValueSpecial::class, $kdKecamatan),
             '[kode_keluarga]' => new ExcelParam(CellSetterArrayValueSpecial::class, $kodeKeluarga),
             '[nik_kk]' => new ExcelParam(CellSetterArrayValueSpecial::class, $nikKK),
             '[nama_kk]' => new ExcelParam(CellSetterArrayValueSpecial::class, $namaKK),
@@ -164,69 +193,5 @@ class ExportKeluargaController extends Controller
         $item->terlaluBanyak == true ?  array_push($header[0], 'TERLALU BANYAK (≥ 3 ANAK)') : false;
         $item->kbrStunting == true ?  array_push($header[0], 'KATEGORI KELUARGA BERPOTENSI RISIKO STUNTING') : false;
         return $header;
-    }
-
-    public function kaseAman()
-    {
-        $now = new DateTime();
-        $dateArr = [
-            '01-06-2018',
-            '02-06-2018',
-            '03-06-2018',
-            '04-06-2018',
-            '05-06-2018',
-        ];
-        $codeArr = [
-            '0001543',
-            '0003274',
-            '000726',
-            '0012553',
-            '0008245',
-        ];
-        $managerArr = [
-            'Adams D.',
-            'Baker A.',
-            'Clark H.',
-            'Davis O.',
-            'Evans P.',
-        ];
-        $salesAmountArr = [
-            '10 230 $',
-            '45 100 $',
-            '70 500 $',
-            '362 180 $',
-            '5 900 $',
-        ];
-        $salesManagerArr = [
-            'Nalty A.',
-            'Ochoa S.',
-            'Patel O.',
-        ];
-        $hoursArr = [
-            ['01', '02', '03', '04', '05', '06', '07', '08'],
-        ];
-        $numOfSalesByHours = [
-            ['100', '200', '300', '400', '500', '600', '700', '800'],
-            ['1000', '2000', '3000', '4000', '5000', '6000', '7000', '8000'],
-            ['10000', '20000', '30000', '40000', '50000', '60000', '70000', '80000'],
-            ['10000', '20000', '30000', '40000', '50000', '60000', '70000', '80000'],
-            ['10000', '20000', '30000', '40000', '50000', '60000', '70000', '80000'],
-            ['10000', '20000', '30000', '40000', '50000', '60000', '70000', '80000'],
-        ];
-
-        // $params = [
-        //     '{current_date}' => new ExcelParam(CellSetterStringValue::class, $now->format('d-m-Y')),
-        //     '{department}' => new ExcelParam(CellSetterStringValue::class, 'Sales department'),
-
-        //     '[date]' => new ExcelParam(CellSetterArrayValue::class, $dateArr),
-        //     '[code]' => new ExcelParam(CellSetterArrayValue::class, $codeArr),
-        //     '[manager]' => new ExcelParam(CellSetterArrayValue::class, $managerArr),
-        //     '[sales_amount]' => new ExcelParam(CellSetterArrayValue::class, $salesAmountArr),
-
-        //     '[sales_manager]' => new ExcelParam(CellSetterArrayValue::class, $salesManagerArr),
-        //     '[[hours]]' => new ExcelParam(CellSetterArray2DValue::class, $hoursArr),
-        //     '[[sales_amount_by_hours]]' => new ExcelParam(CellSetterArray2DValue::class, $numOfSalesByHours),
-        // ];
-        // PhpExcelTemplator::outputToFile($templateFile, $fileName, $params);
     }
 }

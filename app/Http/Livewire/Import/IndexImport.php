@@ -118,7 +118,7 @@ class IndexImport extends Component
 
             Keluarga::create([
                 'kelurahan_id' => $kelurahan_id,
-                'kd_kelurahan' => $row[0],
+                'kd_kecamatan' => $row[0],
                 'kode_keluarga' => $row[1],
                 'nik_kk' => $row[5],
                 'nama_kk' => $row[6],

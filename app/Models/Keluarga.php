@@ -11,7 +11,7 @@ class Keluarga extends Model
 
     protected $fillable = [
         'kelurahan_id',
-        'kd_kelurahan',
+        'kd_kecamatan',
         'kode_keluarga',
         'nik_kk',
         'nama_kk',

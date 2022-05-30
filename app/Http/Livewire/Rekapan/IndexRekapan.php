@@ -16,11 +16,12 @@ class IndexRekapan extends Component
 {
     use WithPagination;
 
-    public $baduta, $balita, $pusHamil, $pus, $anakTidakSekolah, $tidakMemilikiSumberPenghasilan, $lantaiTanah, $tidakMakan, $praSejahtera, $tidakMemilikiSumberAir, $tidakMemilikiJamban, $tidakMemilikiRumah, $pendidikanDibawah, $terlaluMuda, $terlaluTua, $terlaluDekat, $terlaluBanyak, $kbrStunting;
+    public $baduta = false, $balita = false, $pusHamil = false, $pus = false, $anakTidakSekolah = false, $tidakMemilikiSumberPenghasilan = false, $lantaiTanah = false, $tidakMakan = false, $praSejahtera = false, $tidakMemilikiSumberAir = false, $tidakMemilikiJamban = false, $tidakMemilikiRumah = false, $pendidikanDibawah = false, $terlaluMuda = false, $terlaluTua = false, $terlaluDekat = false, $terlaluBanyak = false, $kbrStunting = false;
     public $item, $export = [];
     public $paginate = 10, $search;
     protected $queryString = ['search'];
-    public $provinces, $province, $districts, $district, $subDistricts, $subDistrict;
+    public $provinces, $province, $districts, $district, $subDistricts, $subDistrict, $provinceFilter, $districtFilter, $subDistrictFilter;
+    public $cekFilter = false;
 
     public function mount()
     {
@@ -28,10 +29,12 @@ class IndexRekapan extends Component
         $this->setExport();
     }
 
+
     public function render()
     {
+
         return view('livewire.rekapan.index-rekapan', [
-            'keluarga' => Keluarga::whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)
+            'keluarga' => ($this->cekFilter) ? Keluarga::whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)
                 ->baduta($this->baduta)
                 ->balita($this->balita)
                 ->pusHamil($this->pusHamil)
@@ -50,36 +53,53 @@ class IndexRekapan extends Component
                 ->terlaluDekat($this->terlaluDekat)
                 ->terlaluBanyak($this->terlaluBanyak)
                 ->kbrStunting($this->kbrStunting)
-                ->paginate($this->paginate),
+                ->orderBy('provinsi')
+                ->orderBy('kabupaten_kota')
+                ->orderBy('kecamatan')
+                ->orderBy('desa_kelurahan')
+                ->orderBy('nama_kk')
+                ->paginate($this->paginate) :
+                null,
         ]);
     }
 
+    public function filter()
+    {
+        $this->cekFilter = true;
+        $this->province = $this->provinceFilter;
+        $this->district = $this->districtFilter;
+        $this->subDistrict = $this->subDistrictFilter;
+        $this->resetPage();
+        $this->runningChart();
+    }
+
+
     public function getDistrict()
     {
-        $this->districts = Kabupaten::where('provinsi_id', $this->province)->get();
+        $this->districts = Kabupaten::where('provinsi_id', $this->provinceFilter)->get();
     }
 
     public function getSubDistrict()
     {
-        $this->subDistricts = Kecamatan::where('kabupaten_id', $this->district)->get();
-    }
-
-    public function hidrate()
-    {
-        $this->dispatchBrowserEvent('chartChanged', ['item' => $this->item]);
-    }
-
-    public function updated()
-    {
-        $this->runningChart();
-        $this->setExport();
+        $this->subDistricts = Kecamatan::where('kabupaten_id', $this->districtFilter)->get();
     }
 
     public function runningChart()
     {
         $this->chekCheklist();
+        $satuanWilayah = null;
 
-        $item['categories'] = Keluarga::select('desa_kelurahan')->whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)
+        if ($this->subDistrict !== null && $this->subDistrict !== '') {
+            $satuanWilayah = 'desa_kelurahan';
+        } else if ($this->district !== null && $this->district !== '') {
+            $satuanWilayah = 'kecamatan';
+        } else if ($this->province !== null && $this->province !== '') {
+            $satuanWilayah = 'kabupaten_kota';
+        } else {
+            $satuanWilayah = 'provinsi';
+        }
+
+        $item['categories'] = Keluarga::select($satuanWilayah)->whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)
             ->baduta($this->baduta)
             ->balita($this->balita)
             ->pusHamil($this->pusHamil)
@@ -98,10 +118,10 @@ class IndexRekapan extends Component
             ->terlaluDekat($this->terlaluDekat)
             ->terlaluBanyak($this->terlaluBanyak)
             ->kbrStunting($this->kbrStunting)
-            ->groupByRaw('desa_kelurahan')->pluck('desa_kelurahan')->toArray();
+            ->groupByRaw($satuanWilayah)->pluck($satuanWilayah)->toArray();
 
 
-        $item['data'] = Keluarga::select(DB::raw('COUNT(desa_kelurahan) as jumlah'))->whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)
+        $item['data'] = Keluarga::select(DB::raw('COUNT(' . $satuanWilayah . ') as jumlah'))->whereProvince($this->province)->whereDistrict($this->district)->whereSubDistrict($this->subDistrict)
             ->baduta($this->baduta)
             ->balita($this->balita)
             ->pusHamil($this->pusHamil)
@@ -120,11 +140,9 @@ class IndexRekapan extends Component
             ->terlaluDekat($this->terlaluDekat)
             ->terlaluBanyak($this->terlaluBanyak)
             ->kbrStunting($this->kbrStunting)
-            ->groupByRaw('desa_kelurahan')->pluck('jumlah')->toArray();
-
-
-
+            ->groupByRaw($satuanWilayah)->pluck('jumlah')->toArray();
         $this->dispatchBrowserEvent('chartChanged', ['item' => $item]);
+        $this->setExport();
     }
 
     public function chekCheklist()
@@ -184,5 +202,12 @@ class IndexRekapan extends Component
         ];
 
         $this->export = json_encode($export);
+    }
+
+    public function optionChanged()
+    {
+        if ($this->cekFilter) {
+            $this->runningChart();
+        }
     }
 }
