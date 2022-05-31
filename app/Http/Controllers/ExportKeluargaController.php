@@ -35,7 +35,7 @@ class ExportKeluargaController extends Controller
         $provinsi = [];
 
         $item = json_decode($request->export);
-        $select = $this->addSelect($item);
+        $this->addSelect($item);
 
 
 
@@ -68,16 +68,18 @@ class ExportKeluargaController extends Controller
             ->get();
 
 
-        // dd($query);
 
         foreach ($query as $sel) {
             array_push($result, []);
         }
 
+        // dd(count($this->requestSelect));
         $index = 0;
         foreach ($query as $row) {
-            foreach ($this->requestSelect as $row2) {
-                array_push($result[$index], $row[$row2]);
+            if (count($this->requestSelect) != 0) {
+                foreach ($this->requestSelect as $row2) {
+                    array_push($result[$index], $row[$row2]);
+                }
             }
             array_push($kdKecamatan, $row['kd_kecamatan']);
             array_push($kodeKeluarga, $row['kode_keluarga']);
@@ -90,30 +92,14 @@ class ExportKeluargaController extends Controller
             $index++;
         }
 
-        // for ($i = 0; $i < count($query); $i++) {
-        //     for ($j = 0; $j < count($this->requestSelect); $j++) {
-        //         array_push($result[$i], $query[$i][$this->requestSelect[$j]]);
-        //     }
-        //     array_push($kdKecamatan, $query[$i]['kd_kecamatan']);
-        //     array_push($kodeKeluarga, $query[$i]['kode_keluarga']);
-        //     array_push($nikKK, $query[$i]['nik_kk']);
-        //     array_push($namaKK, $query[$i]['nama_kk']);
-        //     array_push($kelurahan, $query[$i]->kelurahan->nama);
-        //     array_push($kecamatan, $query[$i]->kelurahan->kecamatan->nama);
-        //     array_push($kabupaten, $query[$i]->kelurahan->kecamatan->kabupaten->nama);
-        //     array_push($provinsi, $query[$i]->kelurahan->kecamatan->kabupaten->provinsi->nama);
-        // }
-
-
 
         $templateFile = 'templates/template_KBRS.xlsx';
         $fileName = 'exported_KBRS.xlsx';
 
 
         $header = $this->addHeader($item);
-
         $params = [
-            '[kd_kelurahan]' => new ExcelParam(CellSetterArrayValueSpecial::class, $kdKecamatan),
+            '[kd_kecamatan]' => new ExcelParam(CellSetterArrayValueSpecial::class, $kdKecamatan),
             '[kode_keluarga]' => new ExcelParam(CellSetterArrayValueSpecial::class, $kodeKeluarga),
             '[nik_kk]' => new ExcelParam(CellSetterArrayValueSpecial::class, $nikKK),
             '[nama_kk]' => new ExcelParam(CellSetterArrayValueSpecial::class, $namaKK),
@@ -122,17 +108,25 @@ class ExportKeluargaController extends Controller
             '[kabupaten]' => new ExcelParam(CellSetterArrayValueSpecial::class, $kabupaten),
             '[provinsi]' => new ExcelParam(CellSetterArrayValueSpecial::class, $provinsi),
             '[[header]]' => new ExcelParam(CellSetterArray2DValue::class, $header),
-            '[[body]]' => new ExcelParam(CellSetterArray2DValue::class, $result, function (CallbackParam $param) {
+
+        ];
+
+        if (count($this->requestSelect) != 0) {
+            $params['[[body]]'] = new ExcelParam(CellSetterArray2DValue::class, $result, function (CallbackParam $param) {
                 $sheet = $param->sheet;
                 $row_index = $param->row_index;
                 $col_index = $param->col_index;
                 $cell_coordinate = $param->coordinate;
 
                 // $sheet->getStyle($cell_coordinate)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFB5FFA8');
-                $sheet->getStyle($cell_coordinate)->getBorders()->getOutline()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM)->getColor()->setARGB('B5C0FF');
-            }),
 
-        ];
+                $sheet->getStyle($cell_coordinate)->getBorders()->getOutline()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM)->getColor()->setARGB('B5C0FF');
+            });
+        } else {
+            $params['[[body]]'] = [];
+        }
+
+
         PhpExcelTemplator::outputToFile($templateFile, $fileName, $params);
     }
 
